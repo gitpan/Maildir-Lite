@@ -53,7 +53,7 @@ Read new messages into an array and flag message as seen while moving it to cur:
 
 =head1 DESCRIPTION
 
-This is a simple and very lite implementation of Maildir as specified 
+This is a simple and very light implementation of Maildir as specified 
 by D. J. Bernstein at L<http://cr.yp.to/proto/maildir.html>
 
 This module provide the user with a simple interface to reading and writing 
@@ -91,7 +91,7 @@ sub-directories.
 =item * C<uniq> - set unique integer which will be otherwise randomly 
 generated for filennames; it is important that uniq is actually unique.
 
-=item * C<sort> - the read messege sorting method. See L<sort|sort>.
+=item * C<sort> - the read messege sorting method. See L</sort>.
 
 =back
 
@@ -153,7 +153,7 @@ sub new_to_cur {
 Add a specific C<$action> (function or 'close') to C<$folder> for 
 the C<$flag> flag.
 
-For eaxample, if you wish to move files from F<new> to F<trash> when given 
+For example, if you wish to move files from F<new> to F<trash> when given 
 the flag 'T' (or 'trash'):
 
    $mdir->add_action('new','trash',\&new_to_trash);
@@ -279,7 +279,7 @@ As above, but create the additional directories F<trash>, F<sent>:
    $maildir->mkdir("trash","sent");
 
 This subroutine does B<not> need to be explicitly called before creating new 
-messages (unless you want to create folders other than F<tmp>,F<new>, 
+messages (unless you want to create folders other than F<tmp>, F<new>, 
 and F<cur>).
 
 This subroutine returns 0 if the directories were created (or exist), otherwise 
@@ -608,10 +608,11 @@ Get the next message (as file handle) from directory F<new>:
    my ($fh,$status)=$maildir->get_next_message("new");
 
 B<NOTE:> It is important to I<properly> close file handle once finished with 
-L<close_message|close_message> or L<act|act>.
+L</close_message> or L</act>.
 
-Get lines of next message in array @lines then and execute the action 
-specified for flag 'P' (default for F<new>: move to F<cur> and append ':2,P'):
+Read lines of next message in array @lines then, close message and 
+execute the action specified for flag 'P' (default for F<new>: move 
+to F<cur> and append ':2,P'):
 
    my $status=$maildir->get_next_message("new",\@lines,'passed');
 
@@ -656,7 +657,7 @@ sub get_next_message {
 
 =head3 force_readdir
 
-Force a readdir during the next L<get_next_message|get_next_message>. This is
+Force a readdir during the next L</get_next_message>. This is
 useful if you are reading messages from F<new> and then from F<cur> as some
 of the messages will be moved there.
 

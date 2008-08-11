@@ -12,6 +12,7 @@ WriteMakefile(
         'Test::More' => 0.01,
         'Sys::Hostname' => 1.11,
         'File::Sync' => 0.09,
+        'Test::Files' => 0.14,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Maildir-Lite-*' },
