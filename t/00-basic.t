@@ -1,5 +1,5 @@
-#!perl -T
-##!/usr/bin/perl 
+#!/usr/bin/perl 
+##!perl -T
 use warnings;
 use strict;
 
@@ -31,36 +31,44 @@ ok($rc==0, "Create and deliver message");
 
 my $fname;
 {
-# get the last finame of the file:
+# get th last fname of the file:
    $_=$mdir->fname;
    my ($tp,$uniq,$host) = /(.*)_(\d+)\.(.*)/;
    $fname=$tp.'_'.($uniq-1).'.'.$host;
 }
 
+SKIP: {
+         skip "Message was not created", 2 if $rc!=0;
 #6
-dir_contains_ok("$dir_name/new", [$fname],
-      "Directory \'new\' contains the delivered message");
+         dir_contains_ok("$dir_name/new", [$fname],
+               "Directory \'new\' contains the delivered message");
 
 #7
-file_ok("$dir_name/new/$fname",$test_message,
-      "Message content was written correctly");
+         file_ok("$dir_name/new/$fname",$test_message,
+               "Message content was written correctly");
+      }
 
 {
    my ($fh,$stat)=$mdir->get_next_message("new");
 #8
    ok($stat==0, "Get next message from new directory");
-   my @lines=<$fh>;
-   my $line=join(' ',@lines);
+
+SKIP: {
+         skip "Filehandle is undefined", 3 if $stat!=0;
+
+         my @lines=<$fh>;
+         my $line=join(' ',@lines);
 #9
-   is( $line, $test_message, "Message read was correct");
-   $rc=$mdir->act($fh,'D');
+         is( $line, $test_message, "Message read was correct");
+         $rc=$mdir->act($fh,'D');
 
 #10
-   ok($rc==0, "Appended info \':2,D\' and moved file to \'cur\'");
+         ok($rc==0, "Appended info \':2,D\' and moved file to \'cur\'");
 
 #11
-   dir_contains_ok("$dir_name/cur", ["$fname:2,D"],
-         "Directory \'cur\' contains the read message");
+         dir_contains_ok("$dir_name/cur", ["$fname:2,D"],
+               "Directory \'cur\' contains the read message");
+      }
 }
 
 

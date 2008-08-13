@@ -25,26 +25,29 @@ ok($rc==0, "Creating subdirectories");
 $rc=$mdir->creat_message($test_message);
 ok($rc==0, "Create and deliver message");
 
+SKIP: {
+         skip "No message was created", 3 if $rc!=0;
 #4
-$rc=$mdir->add_action('new','trash',\&new_to_trash);
-ok($rc==0,"Adding action for flag \'T\' when in folder new");
+         $rc=$mdir->add_action('new','trash',\&new_to_trash);
+         ok($rc==0,"Adding action for flag \'T\' when in folder new");
 
-my $fname;
-{
+         my $fname;
+         {
 # get the last finame of the file:
-   $_=$mdir->fname;
-   my ($tp,$uniq,$host) = /(.*)_(\d+)\.(.*)/;
-   $fname=$tp.'_'.($uniq-1).'.'.$host;
-}
+            $_=$mdir->fname;
+            my ($tp,$uniq,$host) = /(.*)_(\d+)\.(.*)/;
+            $fname=$tp.'_'.($uniq-1).'.'.$host;
+         }
 
 #5
-my @lines;
-$rc=$mdir->get_next_message("new",\@lines,'T');
-ok($rc==0, "Get next message from new directory, "
-                     ."append \'T\' and move to trash");
+         my @lines;
+         $rc=$mdir->get_next_message("new",\@lines,'T');
+         ok($rc==0, "Get next message from new directory, "
+               ."append \'T\' and move to trash");
 #6
-dir_contains_ok("$dir_name/trash", ["$fname:2,T"],
-         "Directory \'trash\' contains the read message");
+         dir_contains_ok("$dir_name/trash", ["$fname:2,T"],
+               "Directory \'trash\' contains the read message");
+      }
 
 sub new_to_trash {
    my ($path, $filename,$action)=@_;

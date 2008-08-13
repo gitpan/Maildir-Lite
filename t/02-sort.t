@@ -36,11 +36,15 @@ for(my $i=1;$i<=5;$i++) {
    $rc=$mdir->get_next_message("new",\@lines,'S');
    ok($rc==0, "Get message $i from new directory, "
          ."append \'S\' and move to sort");
-   my $line=join(' ',@lines);
-   if($line=~m/.*sort:\s*(\d+)/) {
-      my $num=$1;
-      ok($num==$i, "File with sort id $i (in order)");
-   }
+
+SKIP: {
+         skip "Did not read a message", 1 if $rc!=0;
+         my $line=join(' ',@lines);
+         if($line=~m/.*sort:\s*(\d+)/) {
+            my $num=$1;
+            ok($num==$i, "File with sort id $i (in order)");
+         }
+      }
 }
 
 sub new_to_sort {

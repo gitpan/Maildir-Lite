@@ -6,7 +6,7 @@ use Sys::Hostname 'hostname';
 use File::Sync 'fsync';
 use Carp;
 
-our $VERSION ='0.01';
+our $VERSION ='0.02';
 
 
 =head1 NAME
